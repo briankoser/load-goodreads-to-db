@@ -1,0 +1,23 @@
+{
+  "name": "load-goodreads-to-db",
+  "version": "1.0.0",
+  "description": "Load Goodreads user data to database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/briankoser/load-goodreads-to-db.git"
+  },
+  "author": "Brian Koser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/briankoser/load-goodreads-to-db/issues"
+  },
+  "homepage": "https://github.com/briankoser/load-goodreads-to-db#readme",
+  "dependencies": {
+    "pg": "^8.6.0",
+    "sosoreads": "^0.1.1"
+  }
+}
