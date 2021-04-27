@@ -13,9 +13,9 @@ const sosoreadsOptions = {
 };
 const sosoreads = sosoreadsLib(sosoreadsOptions);
 const dbOptions = {
-    user: 'kodexload',
-    host: 'SG-kodex-1856-pgsql-master.servers.mongodirector.com',
-    database: 'postgres',
+    database: 'kodex',
+    host: 'SG-koser-1876-pgsql-master.servers.mongodirector.com',
+    user: '',
     password: '', 
     port: 5432
 }; // todo: move password to credentials file
@@ -24,7 +24,17 @@ const db = new Client(dbOptions);
 
 
 // main flow
-saveUsersReviews()
+// load multiple users
+// saveUsersReviews()
+//     .then(results => {
+//         console.log(results);
+//     })
+//     .catch(err => {
+//         console.log(err);
+//     });
+
+// load single user
+saveUserReviewsAsync('4812558')
     .then(results => {
         console.log(results);
     })
@@ -34,7 +44,14 @@ saveUsersReviews()
 
 
 
-// fauna functions
+// db functions
+async function getDoesReviewExistAsync(goodreadsId) {
+    const res = await db.query('SELECT count(*) > 0 as doesexist FROM books.review WHERE goodreadsreviewid = $1::text', [goodreadsId]);
+    let doesExist = res.rows[0].doesexist;
+    console.log(`Does exist: ${doesExist}`);
+    return doesExist;
+}
+
 async function createFaunaShelfAsync (goodreadsId, name) {
     // return fauna.query(
     //     q.Create(
@@ -322,12 +339,8 @@ async function saveUserReviewsAsync (goodreadsUserId) {
                 response.reviews.forEach(async sosoreadsReview => {
                     console.log(`sosoreadsReview id: ${sosoreadsReview.id}`);
                     
-                    // check if review exists in Fauna
-                    // let review = await getReviewAsync(sosoreadsReview);
-                    const res = await client.query('SELECT $1::text as message', ['Hello world!'])
-                    console.log(res.rows[0].message) // Hello world!
-
-                    let doesReviewExist = false;
+                    // check if review exists in db
+                    let doesReviewExist = await getDoesReviewExistAsync(sosoreadsReview.id);
                     if (doesReviewExist) {
                         console.log('review exists in fauna');
                         // if changes, update
