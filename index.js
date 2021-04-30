@@ -13,8 +13,8 @@ const sosoreadsOptions = {
 };
 const sosoreads = sosoreadsLib(sosoreadsOptions);
 const dbOptions = {
-    database: 'kodex',
-    host: 'SG-koser-1876-pgsql-master.servers.mongodirector.com',
+    database: '',
+    host: '',
     user: '',
     password: '', 
     port: 5432
@@ -45,11 +45,25 @@ saveUserReviewsAsync('4812558')
 
 
 // db functions
-async function getDoesReviewExistAsync(goodreadsId) {
-    const res = await db.query('SELECT count(*) > 0 as doesexist FROM books.review WHERE goodreadsreviewid = $1::text', [goodreadsId]);
+async function queryDoesReviewExistAsync(goodreadsReviewId) {
+    const res = await db.query('SELECT count(*) > 0 as doesexist FROM books.review WHERE goodreadsreviewid = $1::text', [goodreadsReviewId]);
     let doesExist = res.rows[0].doesexist;
     console.log(`Does exist: ${doesExist}`);
     return doesExist;
+}
+
+async function queryBookIdAsync(goodreadsBookId) {
+    const res = await db.query('SELECT id FROM books.book WHERE book.goodreadsbookid = $1::text', [goodreadsBookId]);
+    let id = res.rows[0]?.id;
+    console.log(`Book ID: ${id}`);
+    return id;
+}
+
+async function queryUserBookIdAsync(goodreadsBookId, goodreadsUserId) {
+    const res = await db.query('SELECT userbook.id FROM books.userbook JOIN books.book ON userbook.bookid = book.id JOIN users.kodexuser ON userbook.userid = kodexuser.id WHERE book.goodreadsbookid = $1::text AND kodexuser.goodreadsuserid = $2::text', [goodreadsBookId, goodreadsUserId]);
+    let id = res.rows[0]?.id;
+    console.log(`User Book ID: ${id}`);
+    return id;
 }
 
 async function createFaunaShelfAsync (goodreadsId, name) {
@@ -295,21 +309,27 @@ async function getShelfRefsAsync (sosoShelves, scope) {
     console.log(`Shelf count: ${shelves.length}`);
     return shelves;
 }
-        
-async function getUserBookRefAsync (review) {
-    let doesExist = false;
-    if (doesExist) {
-        console.log('user book exists');
-        // if user book exists, return user book ref
-        // let userBook = await getUserBookRefAsync(review);
+
+async function getBookIdAsync (review) {
+    let bookId = await queryBookIdAsync(review.book.id);
+    if (bookId) {
+        return bookId;
     }
     else {
-        // if shelves exist, get shelfids. if shelves don't exist, insert them
-        let bookShelfRefs = await getShelfRefsAsync(review.book.shelves, "BOOK");
-        let userBookShelfRefs = await getShelfRefsAsync(review.book.shelves, "USER");
-        
-        // if book exists, get bookid. if book doesn't exist, insert it
-        let bookRef = await getBookRefAsync(review, bookShelfRefs);
+        let authorIds = await getAuthorIdsAsync(review);
+        let bookShelfIds = await getBookshelfIdsAsync(review);
+
+        // create book
+    }
+}
+
+async function getUserBookIdAsync (review, goodreadsUserId) {
+    let userBookId = await queryUserBookIdAsync(review.book.id, goodreadsUserId);
+    if (userBookId) {
+        return userBookId;
+    }
+    else {
+        let bookId = await getBookIdAsync(review);
 
         // create user book
     }
@@ -340,18 +360,17 @@ async function saveUserReviewsAsync (goodreadsUserId) {
                     console.log(`sosoreadsReview id: ${sosoreadsReview.id}`);
                     
                     // check if review exists in db
-                    let doesReviewExist = await getDoesReviewExistAsync(sosoreadsReview.id);
+                    let doesReviewExist = await queryDoesReviewExistAsync(sosoreadsReview.id);
                     if (doesReviewExist) {
-                        console.log('review exists in fauna');
+                        console.log('review exists in db');
                         // if changes, update
                         // if no change, break from loop
                     }
                     else {
-                        // if userbook exists, get userbookref. if userbook doesn't exist, insert it
-                        //let userBookRef = await getUserBookRefAsync(sosoreadsReview);
+                        // if userbook exists, get userbookid. if userbook doesn't exist, insert it
+                        let userBookRef = await getUserBookIdAsync(sosoreadsReview, goodreadsUserId);
 
-                        // insert review
-                        console.log(`todo: insert review`);
+                        // create review
                     }
                 });
 
