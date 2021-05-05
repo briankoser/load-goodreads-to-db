@@ -54,8 +54,24 @@ async function insertAuthorAsync(author) {
     return id;
 }
 
-async function insertAuthorBookAsync(bookId, authorId) {
-    db.query('INSERT INTO books.author_book (bookid, authorid) VALUES ($1, $2)', [bookId, authorId]);
+function insertAuthorBook(bookId, authorId) {
+    db.query('INSERT INTO books.author_book (bookid, authorid) VALUES ($1, $2)', [bookId, authorId])
+      .then(res => console.log('Inserted author_book'))
+}
+
+function insertBookBookShelf(bookId, shelfId) {
+    db.query('INSERT INTO books.book_bookshelf (bookid, bookshelfid, "timestamp") VALUES ($1, $2, current_timestamp)', [bookId, shelfId])
+      .then(res => console.log('Inserted book_bookshelf'))
+      .catch(e => console.log(`book_bookshelf already exists for ${bookId} and ${shelfId}`));
+}
+
+async function insertBookAsync(book) {
+    const query = 'INSERT INTO books.book (name, descriptionfull, descriptionshort, goodreadsbookid, goodreadsratingsaverage, goodreadsratingscount, goodreadsurl, imagelarge, imagesmall, isbn, isbn13, pagecount, publicationyear, "timestamp") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, current_timestamp) RETURNING id';
+    const values = [book.title, book.descriptions.short, book.descriptions.full, book.id, book.ratings.average, book.ratings.count, book.url, book.images.large, book.images.small, book.isbn, book.isbn13, book.edition.pageCount, book.edition.year];
+    const res = await db.query(query, values);
+    const id = res.rows[0]?.id;
+    console.log(`Inserted Book: ${id}`);
+    return id;
 }
 
 async function insertShelfAsync(shelf) {
@@ -185,9 +201,15 @@ function buildReview (review) {
     // };
 }
 
-async function createAuthorBooksAsync (bookId, authorIds) {
-    for (const authorId in authorIds) {
-        insertAuthorBookAsync(bookId, authorId);
+function createAuthorBooks (bookId, authorIds) {
+    for (const authorId of authorIds) {
+        insertAuthorBook(bookId, authorId);
+    };
+}
+
+function createBookBookShelfs (bookId, bookShelfIds) {
+    for (const shelfId of bookShelfIds) {
+        insertBookBookShelf(bookId, shelfId);
     };
 }
 
@@ -196,12 +218,12 @@ async function getAuthorIdsAsync (sosoreadsAuthors) {
     let dbAuthorIds = await queryAuthorIdsAsync(goodreadsAuthorIds);
     let authorIds = [];
 
-    sosoreadsAuthors.forEach(async sosoReadsAuthor => {
-        if (dbAuthorIds.map(a => a.goodreadsauthorid).includes(sosoReadsAuthor.id)) {
-            authorIds.push(dbAuthorIds.find(a => a.goodreadsauthorid === sosoReadsAuthor.id).id);
+    sosoreadsAuthors.forEach(async sosoreadsAuthor => {
+        if (dbAuthorIds.map(a => a.goodreadsauthorid).includes(sosoreadsAuthor.id)) {
+            authorIds.push(dbAuthorIds.find(a => a.goodreadsauthorid === sosoreadsAuthor.id).id);
         }
         else {
-            let authorId = insertAuthorAsync(sosoReadsAuthor);
+            let authorId = insertAuthorAsync(sosoreadsAuthor);
             authorIds.push(authorId);
         }
     });
@@ -237,16 +259,17 @@ async function getShelfIdsAsync (sosoreadsShelves, shelfType) {
 
 async function getBookIdAsync (review) {
     let bookId = await queryBookIdAsync(review.book.id);
-    if (bookId) {
-        return bookId;
-    }
-    else {
+    
+    if (bookId == undefined) {
+        bookId = await insertBookAsync(review.book);
         let authorIds = await getAuthorIdsAsync(review.book.authors);
-        let shelfIds = await getShelfIdsAsync(review.book.shelves, 'BOOK');
-        // let bookId = await getBookIdAsync(review);
-        // createAuthorBooksAsync(review.book.id, authorIds);
-        // createBookBookShelfsAsync(review.book.id, bookShelfIds);
+        createAuthorBooks(bookId, authorIds);
     }
+
+    let shelfIds = await getShelfIdsAsync(review.book.shelves, 'BOOK');
+    createBookBookShelfs(bookId, shelfIds);
+
+    return bookId;
 }
 
 async function getUserBookIdAsync (review, goodreadsUserId) {
@@ -256,7 +279,7 @@ async function getUserBookIdAsync (review, goodreadsUserId) {
     }
     else {
         let bookId = await getBookIdAsync(review);
-
+        // get user book shelves
         // create user book
     }
 }
