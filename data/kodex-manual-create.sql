@@ -133,6 +133,9 @@ create table books.Review (
 	CONSTRAINT fk_Review_userbookid FOREIGN KEY(userbookid) REFERENCES books.userbook(id)
 );
 
+ALTER TABLE ONLY books.book_bookshelf ADD CONSTRAINT uq_book_bookshelf UNIQUE (bookid, bookshelfid);
+ALTER TABLE ONLY books.userbook_userbookshelf ADD CONSTRAINT uq_userbook_userbookshelf UNIQUE (userbookid, userbookshelfid);
+
 grant connect on database kodex to kodexload;
 grant usage on schema books to kodexload;
 grant usage on schema users to kodexload;
