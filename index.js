@@ -5,7 +5,7 @@ const { Client } = require('pg');
 
 // constants
 const goodreadsDeveloperKey = ''; // todo: move to credentials file
-const pageSize = 1;
+const pageSize = 200;
 const goodreadsUserIds = ['4812558'];
 
 const sosoreadsOptions = {
@@ -36,7 +36,7 @@ const db = new Client(dbOptions);
 // load single user
 saveUserReviewsAsync('4812558')
     .then(results => {
-        console.log(results);
+        console.log(`Goodreads pages loaded: ${results}`);
     })
     .catch(err => {
         console.log(err);
@@ -59,18 +59,27 @@ function insertAuthorBook(bookId, authorId) {
       .then(res => console.log('Inserted author_book'))
 }
 
-function insertBookBookShelf(bookId, shelfId) {
-    db.query('INSERT INTO books.book_bookshelf (bookid, bookshelfid, "timestamp") VALUES ($1, $2, current_timestamp)', [bookId, shelfId])
-      .then(res => console.log('Inserted book_bookshelf'))
-      .catch(e => console.log(`book_bookshelf already exists for ${bookId} and ${shelfId}`));
-}
-
 async function insertBookAsync(book) {
     const query = 'INSERT INTO books.book (name, descriptionfull, descriptionshort, goodreadsbookid, goodreadsratingsaverage, goodreadsratingscount, goodreadsurl, imagelarge, imagesmall, isbn, isbn13, pagecount, publicationyear, "timestamp") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, current_timestamp) RETURNING id';
     const values = [book.title, book.descriptions.short, book.descriptions.full, book.id, book.ratings.average, book.ratings.count, book.url, book.images.large, book.images.small, book.isbn, book.isbn13, book.edition.pageCount, book.edition.year];
     const res = await db.query(query, values);
     const id = res.rows[0]?.id;
     console.log(`Inserted Book: ${id}`);
+    return id;
+}
+
+function insertBookBookShelf(bookId, shelfId) {
+    db.query('INSERT INTO books.book_bookshelf (bookid, bookshelfid, "timestamp") VALUES ($1, $2, current_timestamp)', [bookId, shelfId])
+    .then(res => console.log('Inserted book_bookshelf'))
+    .catch(e => console.log(`book_bookshelf already exists for ${bookId} and ${shelfId}`));
+}
+
+async function insertReviewAsync(review, userBookId) {
+    const query = 'INSERT INTO books.review (isspoiler, body, dateadded, dateended, datestarted, dateupdated, goodreadsreviewid, goodreadsurl, rating, userbookid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id';
+    const values = [review.isSpoiler, review.body, review.dates.add, review.dates.end, review.dates.start, review.dates.update, review.id, review.url, review.rating * 2, userBookId];
+    const res = await db.query(query, values);
+    const id = res.rows[0]?.id;
+    console.log(`Inserted Review: ${id}`);
     return id;
 }
 
@@ -82,6 +91,19 @@ async function insertShelfAsync(shelf) {
     const id = res.rows[0]?.id;
     console.log(`Inserted Shelf: ${id}`);
     return id;
+}
+
+async function insertUserBookAsync(bookId, userId) {
+    const res = await db.query('INSERT INTO books.userbook(bookid, userid) VALUES ($1, $2) RETURNING id', [bookId, userId]);
+    const id = res.rows[0]?.id;
+    console.log(`Inserted UserBook: ${id}`);
+    return id;
+}
+
+function insertUserBookBookShelf(userBookId, shelfId) {
+    db.query('INSERT INTO books.userbook_userbookshelf (userbookid, userbookshelfid, "timestamp") VALUES ($1, $2, current_timestamp)', [userBookId, shelfId])
+    .then(res => console.log('Inserted userbook_userbookshelf'))
+    .catch(e => console.log(`userbook_userbookshelf already exists for ${userBookId} and ${shelfId}`));
 }
 
 async function queryAuthorIdsAsync(goodreadsAuthorIds) {
@@ -111,96 +133,23 @@ async function queryDoesReviewExistAsync(goodreadsReviewId) {
     return doesExist;
 }
 
-async function queryUserBookIdAsync(goodreadsBookId, goodreadsUserId) {
-    const res = await db.query('SELECT userbook.id FROM books.userbook JOIN books.book ON userbook.bookid = book.id JOIN users.kodexuser ON userbook.userid = kodexuser.id WHERE book.goodreadsbookid = $1::text AND kodexuser.goodreadsuserid = $2::text', [goodreadsBookId, goodreadsUserId]);
+async function queryUserBookIdAsync(goodreadsBookId, userId) {
+    const res = await db.query('SELECT userbook.id FROM books.userbook JOIN books.book ON userbook.bookid = book.id WHERE book.goodreadsbookid = $1::text AND userbook.userid = $2', [goodreadsBookId, userId]);
     const id = res.rows[0]?.id;
     console.log(`User Book ID: ${id}`);
+    return id;
+}
+
+async function queryUserIdAsync(goodreadsUserId) {
+    const res = await db.query('SELECT id FROM users.kodexuser WHERE goodreadsuserid = $1::text', [goodreadsUserId]);
+    const id = res.rows[0]?.id;
+    console.log(`User ID: ${id}`);
     return id;
 }
 
 
 
 // functions
-function buildBook (review) {
-    // return {
-    //     "authorIds": [1234567890],
-    //     "descriptions": {
-    //         "short": "This groundbreaking English version by Robert Fagles is the most important recent translation of Homer's great epic poem.",
-    //         "full": "This groundbreaking English version by Robert Fagles is the most important recent translation of Homer's great epic poem. The verse"
-    //     },
-    //     "goodreadsId": "117929",
-    //     "goodreadsUrl": "https://www.goodreads.com/book/show/117929.The_Iliad",
-    //     "id": "2345678901",
-    //     "images": {
-    //         "large": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482528464l/117929._SX98_.jpg",
-    //         "small": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482528464l/117929._SY75_.jpg"
-    //     },
-    //     "isbn": "0140445927",
-    //     "isbn13": "9780140445923",
-    //     "originalPublicationYear": "-750",
-    //     "pageCount": 683,
-    //     "ratings": {
-    //         "average": "3.87",
-    //         "count": 346167,
-    //         "distribution": {
-    //             "five": 115210,
-    //             "four": 113155,
-    //             "three": 83415,
-    //             "two": 24967,
-    //             "one": 9420
-    //         }
-    //     },
-    //     "series": [{
-    //         "count": 8,
-    //         "name": "Epic Cycle",
-    //         "positionInSeries": 2
-    //     }],
-    //     "title": "The Iliad"
-    // };
-}
-
-// function buildSeries (review) {
-//     return {
-//         "authorId": "123",
-//         "bestBookId": "123456",
-//         "bookCount": "16",
-//         "description": "P.G. Wodehouse's series of comic novels featuring young British dilettante Bertram \"Bertie\" Wooster, and his wry valet Jeeves, who is often the cause of his salvation from increasingly entangled social situations.",
-//         "goodreadsId": "52643",
-//         "id": "52643",
-//         "title": "Jeeves"
-//     };
-// }
-
-// function buildShelf (sosoShelf) {
-//     return {
-//         "goodreadsId": sosoShelf.id,
-//         "name": sosoShelf.name
-//     };
-// }
-
-function buildReview (review) {
-    // return {
-    //     "bookId": "2345678901",
-    //     "owned": false,
-    //     "review": {
-    //         "body": "I'm a fan of the bad book club podcast 372 Pages We'll Never Get Back, and a fan of many of the books they've covered. I built",
-    //         "dates": {
-    //             "add": "2020-02-16T11:33:07-08:00",
-    //             "end": "2020-03-04",
-    //             "start": "2020-02-16",
-    //             "update": "2020-03-04T19:54:53-08:00"
-    //         },
-    //         "goodreadsId": "3193280293",
-    //         "goodreadsUrl": "https://www.goodreads.com/review/show/3193280293",
-    //         "isSpoiler": false,
-    //         "rating": 1,
-    //         "readCount": 1
-    //     },
-    //     "shelfIds": ["3456789012"],
-    //     "userId": "5678901234"
-    // };
-}
-
 function createAuthorBooks (bookId, authorIds) {
     for (const authorId of authorIds) {
         insertAuthorBook(bookId, authorId);
@@ -210,6 +159,12 @@ function createAuthorBooks (bookId, authorIds) {
 function createBookBookShelfs (bookId, bookShelfIds) {
     for (const shelfId of bookShelfIds) {
         insertBookBookShelf(bookId, shelfId);
+    };
+}
+
+function createUserBookBookShelfs (userBookId, userBookShelfIds) {
+    for (const shelfId of userBookShelfIds) {
+        insertUserBookBookShelf(userBookId, shelfId);
     };
 }
 
@@ -272,16 +227,21 @@ async function getBookIdAsync (review) {
     return bookId;
 }
 
-async function getUserBookIdAsync (review, goodreadsUserId) {
-    let userBookId = await queryUserBookIdAsync(review.book.id, goodreadsUserId);
-    if (userBookId) {
-        return userBookId;
+async function getUserBookIdAsync (review, userId) {
+    let userBookId = await queryUserBookIdAsync(review.book.id, userId);
+    if (userBookId == undefined) {
+        let bookId = await getBookIdAsync(review);
+        userBookId = await insertUserBookAsync(bookId, userId);
     }
     else {
-        let bookId = await getBookIdAsync(review);
-        // get user book shelves
-        // create user book
+        let bookShelfIds = await getShelfIdsAsync(review.book.shelves, 'BOOK');
+        createBookBookShelfs(bookId, bookShelfIds);
     }
+    
+    let userbookShelfIds = await getShelfIdsAsync(review.book.shelves, 'USER');
+    createUserBookBookShelfs(userBookId, userbookShelfIds);
+
+    return userBookId;
 }
 
 async function saveUserReviewsAsync (goodreadsUserId) {
@@ -316,14 +276,14 @@ async function saveUserReviewsAsync (goodreadsUserId) {
                         // if no change, break from loop
                     }
                     else {
-                        // if userbook exists, get userbookid. if userbook doesn't exist, insert it
-                        let userBookId = await getUserBookIdAsync(sosoreadsReview, goodreadsUserId);
-
-                        // create review
+                        let userId = await queryUserIdAsync(goodreadsUserId);
+                        let userBookId = await getUserBookIdAsync(sosoreadsReview, userId);
+                        await insertReviewAsync(sosoreadsReview, userBookId);
                     }
                 });
 
-                isSaveComplete = true;
+                // continue processing until the page has no reviews
+                isSaveComplete = response.reviews.length > 0;
             });
 
         // if every review in the page was new, save next page of reviews and loop again
