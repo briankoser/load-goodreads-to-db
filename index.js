@@ -1,25 +1,16 @@
 const sosoreadsLib = require('sosoreads');
-const { Client } = require('pg');
-
+const db = require('./db')
 
 
 // constants
-const goodreadsDeveloperKey = '2kYIBVxcqaN4mdfclzwVQ'; // todo: move to credentials file
-const pageSize = 10;
+const goodreadsDeveloperKey = ''; // todo: move to credentials file
+const pageSize = 1;
 const goodreadsUserIds = ['4812558'];
 
 const sosoreadsOptions = {
     "goodreads_developer_key": goodreadsDeveloperKey
 };
 const sosoreads = sosoreadsLib(sosoreadsOptions);
-const dbOptions = {
-    database: 'kodex',
-    host: 'SG-koser-1876-pgsql-master.servers.mongodirector.com',
-    user: 'kodexload',
-    password: '3e4Bwcu%8xYG!4qctBCYD%PmKDyTFdYZ', 
-    port: 5432
-}; // todo: move password to credentials file
-const db = new Client(dbOptions);
 
 
 
@@ -35,13 +26,8 @@ const db = new Client(dbOptions);
 
 // load single user
 saveUserReviewsAsync('4812558')
-    .then(async results => {
-        console.log(`Goodreads pages loaded: ${results}`);
-        await db.end();
-    })
-    .catch(err => {
-        console.log(err);
-    });
+    .then(results => console.log(`Goodreads pages loaded: ${results}`))
+    .catch(err => console.log(err));
 
 
 
@@ -77,7 +63,7 @@ async function insertBookBookShelfAsync (bookId, shelfId) {
 
 async function insertReviewAsync (review, userBookId) {
     const query = 'INSERT INTO books.review (isspoiler, body, dateadded, dateended, datestarted, dateupdated, goodreadsreviewid, goodreadsurl, rating, userbookid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id';
-    const values = [review.isSpoiler, review.body, review.dates.add, review.dates.end, review.dates.start, review.dates.update, review.id, review.url, review.rating, userBookId];
+    const values = [review.isSpoiler ?? false, review.body, review.dates.add, review.dates.end, review.dates.start, review.dates.update, review.id, review.url, review.rating, userBookId];
     const res = await db.query(query, values);
     const id = res.rows[0]?.id;
     console.log(`Inserted Review: ${id}`);
@@ -115,7 +101,6 @@ async function queryAuthorIdsAsync (goodreadsAuthorIds) {
 async function queryBookIdAsync (goodreadsBookId) {
     const res = await db.query('SELECT id FROM books.book WHERE book.goodreadsbookid = $1::text', [goodreadsBookId]);
     let id = res.rows[0]?.id;
-    console.log(`Book ID: ${id}`);
     return id;
 }
 
@@ -130,21 +115,18 @@ async function queryShelfIdsAsync(goodreadsShelfIds) {
 async function queryDoesReviewExistAsync(goodreadsReviewId) {
     const res = await db.query('SELECT count(*) > 0 as doesexist FROM books.review WHERE goodreadsreviewid = $1::text', [goodreadsReviewId]);
     const doesExist = res.rows[0].doesexist;
-    console.log(`Does exist: ${doesExist}`);
     return doesExist;
 }
 
 async function queryUserBookIdAsync(goodreadsBookId, userId) {
     const res = await db.query('SELECT userbook.id FROM books.userbook JOIN books.book ON userbook.bookid = book.id WHERE book.goodreadsbookid = $1::text AND userbook.userid = $2', [goodreadsBookId, userId]);
     const id = res.rows[0]?.id;
-    console.log(`User Book ID: ${id}`);
     return id;
 }
 
 async function queryUserIdAsync(goodreadsUserId) {
     const res = await db.query('SELECT id FROM users.kodexuser WHERE goodreadsuserid = $1::text', [goodreadsUserId]);
     const id = res.rows[0]?.id;
-    console.log(`User ID: ${id}`);
     return id;
 }
 
@@ -174,15 +156,15 @@ async function getAuthorIdsAsync (sosoreadsAuthors) {
     let dbAuthorIds = await queryAuthorIdsAsync(goodreadsAuthorIds);
     let authorIds = [];
 
-    sosoreadsAuthors.forEach(async sosoreadsAuthor => {
-        if (dbAuthorIds.map(a => a.goodreadsauthorid).includes(sosoreadsAuthor.id)) {
-            authorIds.push(dbAuthorIds.find(a => a.goodreadsauthorid === sosoreadsAuthor.id).id);
+    for (const sosoreadsAuthor of sosoreadsAuthors) {
+        let authorId = dbAuthorIds.find(a => a.goodreadsauthorid === sosoreadsAuthor.id)?.id;
+        
+        if (authorId == undefined) {
+            authorId = await insertAuthorAsync(sosoreadsAuthor);
         }
-        else {
-            let authorId = insertAuthorAsync(sosoreadsAuthor);
-            authorIds.push(authorId);
-        }
-    });
+        
+        authorIds.push(authorId);
+    };
 
     return authorIds;
 }
@@ -192,11 +174,11 @@ async function getShelfIdsAsync (sosoreadsShelves, shelfType) {
     let dbShelfIds = await queryShelfIdsAsync(goodreadsShelfIds);
     let shelfIds = [];
 
-    sosoreadsShelves.forEach(async sosoreadsShelf => {
+    for (const sosoreadsShelf of sosoreadsShelves) {
         let dbShelf = dbShelfIds.find(s => s.goodreadsshelfid === sosoreadsShelf.id);
 
         if (dbShelf == undefined) {
-            let shelfId = insertShelfAsync(sosoreadsShelf);
+            let shelfId = await insertShelfAsync(sosoreadsShelf);
             
             if (shelfType === 'USER') {
                 shelfIds.push(shelfId);
@@ -207,9 +189,8 @@ async function getShelfIdsAsync (sosoreadsShelves, shelfType) {
                 shelfIds.push(dbShelf.id);
             }
         }
-    });
+    };
 
-    console.log(`Shelf IDs: ${JSON.stringify(shelfIds)}`);
     return shelfIds;
 }
 
@@ -249,10 +230,10 @@ async function getUserBookIdAsync (review, userId) {
 async function saveUserReviewsAsync (goodreadsUserId) {
     let isSaveComplete = false;
     let page = 0;
-    await db.connect();
     
     // loop saving a page of reviews until all are saved
-    while (!isSaveComplete) {
+    // while (!isSaveComplete) {
+    while (page <= 5) {
         page += 1;
         const reviewsOptions = {
             "userId": goodreadsUserId,
