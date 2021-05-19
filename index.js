@@ -25,7 +25,7 @@ const sosoreads = sosoreadsLib(sosoreadsOptions);
 //     });
 
 // load single user
-saveUserReviewsAsync('4812558')
+saveUserReviewsAsync(goodreadsUserIds[0])
     .then(results => console.log(`Goodreads pages loaded: ${results}`))
     .catch(err => console.log(err));
 
@@ -232,8 +232,7 @@ async function saveUserReviewsAsync (goodreadsUserId) {
     let page = 0;
     
     // loop saving a page of reviews until all are saved
-    // while (!isSaveComplete) {
-    while (page <= 5) {
+    while (!isSaveComplete) {
         page += 1;
         const reviewsOptions = {
             "userId": goodreadsUserId,
@@ -249,12 +248,10 @@ async function saveUserReviewsAsync (goodreadsUserId) {
             .then(async response => {
                 // loop through reviews
                 response.reviews.forEach(async sosoreadsReview => {
-                    console.log(`sosoreadsReview id: ${sosoreadsReview.id}`);
-                    
                     // check if review exists in db
                     let doesReviewExist = await queryDoesReviewExistAsync(sosoreadsReview.id);
                     if (doesReviewExist) {
-                        console.log('review exists in db');
+                        console.log('Review exists in db');
                         // if changes, update
                         // if no change, break from loop
                     }
@@ -266,7 +263,8 @@ async function saveUserReviewsAsync (goodreadsUserId) {
                 });
 
                 // continue processing until the page has no reviews
-                isSaveComplete = true; //response.reviews.length > 0;
+                console.log(`Review count: ${response.reviews.length}`);
+                isSaveComplete = response.reviews.length == 0;
             });
             
         // if every review in the page was new, save next page of reviews and loop again

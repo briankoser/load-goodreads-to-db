@@ -1,5 +1,5 @@
--- Database
-CREATE DATABASE kodex WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.UTF-8';
+-- Database - create from admin dashboard instead of directly
+-- CREATE DATABASE kodex WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.UTF-8';
 
 
 
@@ -158,17 +158,13 @@ GRANT ALL ON SCHEMA public TO kodexadmin;
 grant connect on database kodex to kodexload;
 grant usage on schema books to kodexload;
 grant usage on schema users to kodexload;
-grant delete, insert, select, update on books.author to kodexload;
-grant delete, insert, select, update on books.author_book to kodexload;
-grant delete, insert, select, update on books.book to kodexload;
-grant delete, insert, select, update on books.book_bookshelf to kodexload;
-grant delete, insert, select, update on books.book_list to kodexload;
-grant delete, insert, select, update on books.bookshelf to kodexload;
-grant delete, insert, select, update on books.bookshelftype to kodexload;
-grant delete, insert, select, update on books.list to kodexload;
-grant delete, insert, select, update on books.review to kodexload;
-grant delete, insert, select, update on books.userbook to kodexload;
-grant delete, insert, select, update on books.userbook_userbookshelf to kodexload;
-grant delete, insert, select, update on books.userbookshelf to kodexload;
-grant delete, insert, select, update on books.userbookshelftype to kodexload;
-grant delete, insert, select, update on users.kodexuser to kodexload;
+grant insert, select on books.author to kodexload;
+grant insert on books.author_book to kodexload;
+grant insert, select on books.book to kodexload;
+grant insert on books.book_bookshelf to kodexload;
+grant select on books.bookshelf to kodexload;
+grant insert, select on books.review to kodexload;
+grant insert, select on books.userbook to kodexload;
+grant insert on books.userbook_userbookshelf to kodexload;
+grant insert, select on books.userbookshelf to kodexload;
+grant select on users.kodexuser to kodexload;

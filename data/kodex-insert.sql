@@ -1,3 +1,59 @@
+-- todo: insert second review for Brian re-reads (stupid Goodreads API won't provide)
+INSERT INTO books.review (isspoiler, body, dateadded, dateended, datestarted, dateupdated, goodreadsreviewid, goodreadsurl, rating, userbookid) VALUES (false, null, null, null, null, null, '2877756673', null, null, 228);
+
+-- select book.name, userbook.id, userbook.userid from books.book join books.userbook on book.id = userbook.bookid where name like 'Archie%'
+
+-- 1414636663,Morning Glories, Vol. 1: For a Better Future,first-read-2015
+-- 2108555756,Midnight Riot (Peter Grant, #1),first-read-2018
+-- 1925022080,The Lion, the Witch and the Wardrobe (The Chronicles of Narnia, #1),first-read-1997
+-- 1164159036,Jonathan Strange & Mr Norrell,first-read-2011
+-- 1165503649,The Fellowship of the Ring (The Lord of the Rings, #1),first-read-2003
+-- 1164163955,The Ladies of Grace Adieu and Other Stories,first-read-2011
+-- 1742925963,The Hitchhiker's Guide to the Galaxy (Hitchhiker's Guide to the Galaxy, #1),first-read-2005
+-- 1932085797,Charlie and the Chocolate Factory (Charlie Bucket, #1),first-read-1998
+-- 1165505677,Here, There Be Dragons (The Chronicles of the Imaginarium Geographica, #1),first-read-2013
+-- 1414419125,The Anubis Gates,first-read-2016
+-- 1707934480,The Mouse and the Motorcycle (Ralph S. Mouse, #1),first-read-1999
+-- 1948779989,American Gods (American Gods, #1),first-read-2005
+-- 1421567801,Astro City, Vol. 4: The Tarnished Angel,first-read-2015
+-- 1165506889,The Hobbit,first-read-2003
+-- 1414636331,Astro City, Vol. 2: Confession,first-read-2017
+-- 1164184399,Nine Princes in Amber (The Chronicles of Amber #1),first-read-2014
+-- 1707935836,Little House in the Big Woods (Little House, #1),first-read-1997
+-- 1946897506,HTML for the World Wide Web,first-read-2004
+-- 141805292,The Book of Three (The Chronicles of Prydain, #1),first-read-2002
+-- 1401589206,Jingo (Discworld, #21),first-read-2011
+-- 1164184924,The Guns of Avalon (The Chronicles of Amber #2),first-read-2014
+-- 1550983107,Matilda,first-read-1998
+-- 1414444075,We Have Always Lived in the Castle,first-read-2016
+-- 1932888183,Freddy Goes to Florida (Freddy the Pig #1),first-read-1999
+-- 1414441312,Dimension of Miracles (Dimension of Miracles #1),first-read-2016
+-- 1401589387,Making Money (Discworld, #36; Moist Von Lipwig, #2),first-read-2011
+-- 1201499705,Astro City, Vol. 1: Life in the Big City,undefined
+-- 1923917585,Astro City, Vol. 3: Family Album,first-read-2018
+-- 1164166172,The Pragmatic Programmer: From Journeyman to Master,first-read-2011
+
+-- todo: insert Melissa re-reads
+-- 2140623254,Dune (Dune Chronicles, #1)
+-- 1635056868,Astro City, Vol. 3: Family Album
+-- 2162563593,A Crown of Swords (The Wheel of Time, #7)
+-- 2156640269,Lord of Chaos (The Wheel of Time, #6)
+-- 2340562653,Something Wicked This Way Comes (Green Town, #2)
+-- 1635098598,Astro City, Vol. 2: Confession
+-- 1610826458,The Hobbit, or There and Back Again
+-- 1609810716,The Eye of the World (The Wheel of Time, #1)
+-- 1612054835,Charlie and the Chocolate Factory (Charlie Bucket, #1)
+-- 1635059990,Astro City, Vol. 8: Shining Stars"
+-- 2309579046,I Am Legend
+-- 1620449166,The Ocean at the End of the Lane
+
+-- todo: clean up auto-generated books.userbookshelf
+
+-- todo: back up books data
+-- SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'kodex' AND pid <> pg_backend_pid();
+
+
+
 -- kodexuser
 INSERT INTO users.kodexuser (id, namedisplay, namefull, goodreadsuserid, goodreadsurl) VALUES (1, 'Brian', 'Brian Koser', '4812558', 'https://www.goodreads.com/user/show/4812558-brian-koser');
 INSERT INTO users.kodexuser (id, namedisplay, namefull, goodreadsuserid, goodreadsurl) VALUES (2, 'Melissa', 'Melissa Koser', '54340861', 'https://www.goodreads.com/user/show/54340861-melissa-koser');
