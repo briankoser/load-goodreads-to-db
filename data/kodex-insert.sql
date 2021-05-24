@@ -1,68 +1,3 @@
--- todo: insert second review for Brian re-reads (stupid Goodreads API won't provide)
---      todo: check if the dates are correct
--- select *
--- from books.userbook
--- left join books.review on userbook.id = review.userbookid
--- where userbook.id in (228, 380, 49, 38, 37, 36, 75, 161, 33, 162, 282, 111, 2, 118, 120, 130, 15, 146, 135, 103, 384, 143, 127, 95, 132, 293, 294, 256)
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 2, '2013-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 15, '2003-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 33, '2003-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 36, '2015-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 37, '2015-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 38, '2015-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 49, '2015-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 75, '1997-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 95, '2016-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 103, '2002-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 111, '1998-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 118, '2016-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 120, '1999-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 127, '1998-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 130, '2005-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 132, '1999-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 135, '1997-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 143, '2014-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 146, '2014-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 161, '2011-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 162, '2011-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 228, null);
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 256, '2011-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 282, '2005-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 293, '2016-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 294, '2011-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 380, '2015-01-01');
-INSERT INTO books.review (isspoiler, dateended, userbookid) VALUES (false, 384, '2011-01-01');
-
-
--- todo: insert Melissa re-reads
--- SELECT userbook.id, book.name, book.goodreadsbookid, review.*
--- FROM books.book 
--- JOIN books.userbook ON book.id = userbook.bookid 
--- left join books.review on userbook.id = review.userbookid
--- WHERE name like 'Dune%' and userbook.userid = 2
--- order by book.name
-
--- 2140623254,Dune (Dune Chronicles, #1)
--- 1635056868,Astro City, Vol. 3: Family Album
--- 2162563593,A Crown of Swords (The Wheel of Time, #7)
--- 2156640269,Lord of Chaos (The Wheel of Time, #6)
--- 2340562653,Something Wicked This Way Comes (Green Town, #2)
--- 1635098598,Astro City, Vol. 2: Confession
--- 1610826458,The Hobbit, or There and Back Again
--- 1609810716,The Eye of the World (The Wheel of Time, #1)
--- 1612054835,Charlie and the Chocolate Factory (Charlie Bucket, #1)
--- 1635059990,Astro City, Vol. 8: Shining Stars"
--- 2309579046,I Am Legend
--- 1620449166,The Ocean at the End of the Lane
-
--- todo: clean up auto-generated books.userbookshelf
--- todo: ratings, including half stars
-
--- todo: back up books data
--- SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'kodex' AND pid <> pg_backend_pid();
-
-
-
 -- kodexuser
 INSERT INTO users.kodexuser (id, namedisplay, namefull, goodreadsuserid, goodreadsurl) VALUES (1, 'Brian', 'Brian Koser', '4812558', 'https://www.goodreads.com/user/show/4812558-brian-koser');
 INSERT INTO users.kodexuser (id, namedisplay, namefull, goodreadsuserid, goodreadsurl) VALUES (2, 'Melissa', 'Melissa Koser', '54340861', 'https://www.goodreads.com/user/show/54340861-melissa-koser');
@@ -230,3 +165,95 @@ INSERT INTO books.userbookshelf(name, userbookshelftypeid, goodreadsshelfid) VAL
 INSERT INTO books.userbookshelf(name, userbookshelftypeid, goodreadsshelfid) VALUES ('To Read with Children', 7, '208010622');
 INSERT INTO books.userbookshelf(name, userbookshelftypeid, goodreadsshelfid) VALUES ('To Read with Spouse', 7, '203409786');
 INSERT INTO books.userbookshelf(name, userbookshelftypeid, goodreadsshelfid) VALUES ('Watched the Movie', 7, '227720808');
+
+
+
+-- re-reads
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 2, '2013-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 15, '2003-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 33, '2003-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 36, '2015-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 37, '2015-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 38, '2015-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 49, '2015-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 75, '1997-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 95, '2016-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 103, '2002-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 111, '1998-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 120, '1999-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 127, '1998-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 130, '2005-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 132, '1999-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 161, '2011-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 282, '2005-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 294, '2011-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 380, '2015-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 384, '2011-01-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 118, '2020-05-03');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 135, '2020-03-08');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 143, '2020-01-22');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 146, '2020-01-09');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 162, '2019-10-01');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 256, '2018-09-19');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 293, '2018-05-30');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 2349, '2021-03-15');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 2354, '2020-12-30');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 2357, '2020-12-31');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 2370, '2020-11-15');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 2390, '2020-08-29');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 2391, '2020-08-29');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 2432, '2020-04-07');
+INSERT INTO books.review (isspoiler, userbookid, dateended) VALUES (false, 2468, '2019-04-10');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- manual insert
+Select * from books.author where name like 'Guyla%'
+
+INSERT INTO books.author (name, goodreadsratingsaverage, goodreadsauthorid, goodreadsratingscount, goodreadsurl, "timestamp") 
+VALUES ('Saundra Lamgo', 4.33, '250881', 6, 'https://www.goodreads.com/author/show/250881.Saundra_Lamgo', current_timestamp) 
+RETURNING id;
+
+INSERT INTO books.book (name, descriptionfull, descriptionshort, goodreadsbookid, goodreadsratingsaverage, goodreadsratingscount, goodreadsurl, imagelarge, imagesmall, isbn, isbn13, pagecount, publicationyear, "timestamp") 
+VALUES ('At the Farm', 'At the Farm is the fourth book in a series of six beginning readers. There readers are filled with hundreds of short stories containing interesting character training themes, science, history, nature, and more. Written with one- syllable words, each book is designed around one of the six basic phonics word groups in our American language. At the Farm allows beginning readers to practice reading controlled-vowel words.', 'At the Farm is the fourth book in a series of six beginning readers.', '4308511', 2.00, 1, 'https://www.goodreads.com/book/show/4308511-at-the-farm', null, null, '1934470082', '9781934470084', 172, 1994, current_timestamp) 
+RETURNING id;
+
+INSERT INTO books.author_book (bookid, authorid) VALUES (2696, 1450);
+INSERT INTO books.author_book (bookid, authorid) VALUES (2696, 1451);
+
+Select * from books.bookshelf
+INSERT INTO books.book_bookshelf (bookid, bookshelfid, "timestamp") VALUES (2696, 7, current_timestamp);
+INSERT INTO books.book_bookshelf (bookid, bookshelfid, "timestamp") VALUES (2696, 20, current_timestamp);
+INSERT INTO books.book_bookshelf (bookid, bookshelfid, "timestamp") VALUES (2696, 47, current_timestamp);
+INSERT INTO books.book_bookshelf (bookid, bookshelfid, "timestamp") VALUES (2696, 51, current_timestamp);
+INSERT INTO books.book_bookshelf (bookid, bookshelfid, "timestamp") VALUES (2696, 54, current_timestamp);
+
+INSERT INTO books.userbook(bookid, userid) VALUES (2696, 3) RETURNING id;
+
+Select * from books.userbookshelf
+INSERT INTO books.userbook_userbookshelf (userbookid, userbookshelfid, "timestamp") VALUES (2881, 29, current_timestamp);
+--INSERT INTO books.userbook_userbookshelf (userbookid, userbookshelfid, "timestamp") VALUES (2879, 55, current_timestamp);
+INSERT INTO books.userbook_userbookshelf (userbookid, userbookshelfid, "timestamp") VALUES (2881, 61, current_timestamp);
+INSERT INTO books.userbook_userbookshelf (userbookid, userbookshelfid, "timestamp") VALUES (2881, 68, current_timestamp);
+
+INSERT INTO books.review (isspoiler, body, dateadded, dateupdated, datestarted, dateended, goodreadsreviewid, goodreadsurl, rating, userbookid) 
+VALUES (false, null, null, null, '2020-06-29', '2020-08-20', null, null, null, 2881) 
+RETURNING id;
+
+
+select * from books.userbook where userid = 3
+
+
