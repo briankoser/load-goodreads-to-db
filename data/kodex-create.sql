@@ -83,6 +83,7 @@ CREATE TABLE books.Book (
     isbn13 varchar(13),
     pageCount integer,
     publicationYear integer,
+    slug varchar unique not null,
 	"timestamp" timestamp with time zone default CURRENT_TIMESTAMP not null
 );
 
