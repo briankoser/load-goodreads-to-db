@@ -1,15 +1,37 @@
 -- select *
 -- from books.book
--- where id in (2609, 448)
+-- where id in (1008, 1994)
+
+-- select userbook.*, bookshelf.*, userbookshelf.*
+-- from books.book
+-- join books.userbook on book.id = userbook.bookid
+-- left join books.book_bookshelf on book.id = book_bookshelf.bookid
+-- left join books.bookshelf on book_bookshelf.bookshelfid = bookshelf.id
+-- left join books.userbook_userbookshelf on userbook.id = userbook_userbookshelf.userbookid
+-- left join books.userbookshelf on userbook_userbookshelf.userbookshelfid = userbookshelf.id
+-- where book.id in (1008, 1994)
+
 
 -- update books.book
--- set publicationyear = 1870
--- where id = 1992
+-- set name = 'Great Illustrated Classics: A Tale of Two Cities'
+-- where id = 1008
 
-UPDATE books.book SET slug = 'a-christmas-carol' WHERE id = 2609;
+
+-- update books.userbook
+-- set bookid = 448
+-- where id = 2770
+
+-- delete from books.author_book where bookid = 2609
+-- delete from books.book where id = 2609
+
+
+
+
+
 UPDATE books.book SET slug = 'a-christmas-carol' WHERE id = 448;
-UPDATE books.book SET slug = 'a-tale-of-two-cities' WHERE id = 1008;
+UPDATE books.book SET slug = 'great-illustrated-classics-a-tale-of-two-cities' WHERE id = 1008;
 UPDATE books.book SET slug = 'a-tale-of-two-cities' WHERE id = 1994;
+
 UPDATE books.book SET slug = 'a-wizard-of-earthsea' WHERE id = 2612;
 UPDATE books.book SET slug = 'a-wizard-of-earthsea' WHERE id = 439;
 UPDATE books.book SET slug = 'alamut' WHERE id = 2019;
@@ -2705,3 +2727,6 @@ UPDATE books.book SET slug = 'zero-to-lazy-eight-the-romance-numbers' WHERE id =
 UPDATE books.book SET slug = 'zoids-chaotic-century-vol-1' WHERE id = 2232;
 UPDATE books.book SET slug = 'zoids-chaotic-century-vol-2' WHERE id = 2448;
 UPDATE books.book SET slug = 'zoids-chaotic-century-vol-3' WHERE id = 2449;
+
+
+select * from books.book where slug is null;
