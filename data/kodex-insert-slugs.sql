@@ -33,6 +33,8 @@
 -- set name = 'Great Illustrated Classics: Pride and Prejudice'
 -- where id = 2268;
 
+--SELECT 'UPDATE books.book SET slug = ''' || books.slugify(name) || ''' WHERE id = ' || id || ';' FROM books.nullslugs
+
 
 
 
@@ -407,6 +409,7 @@ UPDATE books.book SET slug = 'civil-war-wolverine' WHERE id = 623;
 UPDATE books.book SET slug = 'civil-war-x-men-a-marvel-comics-event' WHERE id = 621;
 UPDATE books.book SET slug = 'civil-war-young-avengers-and-runaways' WHERE id = 619;
 UPDATE books.book SET slug = 'civilization-and-capitalism-15th-18th-century-vol-1-the-structures-of-everyday-life' WHERE id = 1926;
+UPDATE books.book SET slug = 'classic-starts-the-swiss-family-robinson' WHERE id = 2168;
 UPDATE books.book SET slug = 'classic-storybook-a-treasury-of-tales' WHERE id = 1555;
 UPDATE books.book SET slug = 'click-clack-moo-cows-that-type' WHERE id = 2404;
 UPDATE books.book SET slug = 'clifford-goes-to-kindergarten' WHERE id = 2418;
@@ -772,6 +775,9 @@ UPDATE books.book SET slug = 'great-illustrated-classics-the-adventures-of-huckl
 UPDATE books.book SET slug = 'great-illustrated-classics-the-adventures-of-sherlock-holmes' WHERE id = 455;
 UPDATE books.book SET slug = 'great-illustrated-classics-the-call-of-the-wild' WHERE id = 2088;
 UPDATE books.book SET slug = 'great-illustrated-classics-the-merry-adventures-of-robin-hood' WHERE id = 1185;
+UPDATE books.book SET slug = 'great-illustrated-classics-the-strange-case-of-dr-jekyll-and-mr-hyde' WHERE id = 2064;
+UPDATE books.book SET slug = 'great-illustrated-classics-the-three-musketeers' WHERE id = 2089;
+UPDATE books.book SET slug = 'great-illustrated-classics-the-time-machine' WHERE id = 1009;
 UPDATE books.book SET slug = 'great-sports-humor' WHERE id = 1157;
 UPDATE books.book SET slug = 'green-lantern-rebirth' WHERE id = 629;
 UPDATE books.book SET slug = 'greenwitch' WHERE id = 2133;
@@ -2257,10 +2263,8 @@ UPDATE books.book SET slug = 'the-rustlers-of-west-fork' WHERE id = 2310;
 UPDATE books.book SET slug = 'the-sable-quean' WHERE id = 2442;
 UPDATE books.book SET slug = 'the-salmon-of-doubt' WHERE id = 558;
 UPDATE books.book SET slug = 'the-scarlet-letter' WHERE id = 14;
-UPDATE books.book SET slug = 'the-scarlet-pimpernel' WHERE id = 2349;
 UPDATE books.book SET slug = 'the-scarlet-pimpernel' WHERE id = 335;
 UPDATE books.book SET slug = 'the-screwtape-letters' WHERE id = 157;
-UPDATE books.book SET slug = 'the-screwtape-letters' WHERE id = 2403;
 UPDATE books.book SET slug = 'the-search-for-the-red-dragon' WHERE id = 1;
 UPDATE books.book SET slug = 'the-search-the-struggle-to-survive' WHERE id = 1004;
 UPDATE books.book SET slug = 'the-secret-garden' WHERE id = 1012;
@@ -2320,8 +2324,6 @@ UPDATE books.book SET slug = 'the-story-of-philosophy-a-concise-introduction-to-
 UPDATE books.book SET slug = 'the-story-of-philosophy-the-lives-and-opinions-of-the-world-s-greatest-philosophers' WHERE id = 2033;
 UPDATE books.book SET slug = 'the-story-of-the-trapp-family-singers' WHERE id = 2507;
 UPDATE books.book SET slug = 'the-strange-affair-of-spring-heeled-jack' WHERE id = 2176;
-UPDATE books.book SET slug = 'the-strange-case-of-dr-jekyll-and-mr-hyde' WHERE id = 2064;
-UPDATE books.book SET slug = 'the-strange-case-of-dr-jekyll-and-mr-hyde' WHERE id = 2320;
 UPDATE books.book SET slug = 'the-strange-case-of-dr-jekyll-and-mr-hyde' WHERE id = 2382;
 UPDATE books.book SET slug = 'the-stranger' WHERE id = 1619;
 UPDATE books.book SET slug = 'the-stress-of-her-regard' WHERE id = 324;
@@ -2329,7 +2331,6 @@ UPDATE books.book SET slug = 'the-stunt' WHERE id = 1115;
 UPDATE books.book SET slug = 'the-subtle-knife' WHERE id = 737;
 UPDATE books.book SET slug = 'the-summer-tree' WHERE id = 1773;
 UPDATE books.book SET slug = 'the-swamp-robber' WHERE id = 1015;
-UPDATE books.book SET slug = 'the-swiss-family-robinson' WHERE id = 2168;
 UPDATE books.book SET slug = 'the-swiss-family-robinson' WHERE id = 934;
 UPDATE books.book SET slug = 'the-sword-in-the-stone' WHERE id = 280;
 UPDATE books.book SET slug = 'the-tale-of-despereaux' WHERE id = 93;
@@ -2345,12 +2346,10 @@ UPDATE books.book SET slug = 'the-third-policeman' WHERE id = 1754;
 UPDATE books.book SET slug = 'the-threat' WHERE id = 897;
 UPDATE books.book SET slug = 'the-three-body-problem' WHERE id = 110;
 UPDATE books.book SET slug = 'the-three-minute-universe' WHERE id = 994;
-UPDATE books.book SET slug = 'the-three-musketeers' WHERE id = 2089;
 UPDATE books.book SET slug = 'the-three-musketeers' WHERE id = 553;
 UPDATE books.book SET slug = 'the-three-stooges-book-of-scripts' WHERE id = 833;
 UPDATE books.book SET slug = 'the-three-two-pitch' WHERE id = 904;
 UPDATE books.book SET slug = 'the-time-machine-and-the-invisible-man' WHERE id = 2339;
-UPDATE books.book SET slug = 'the-time-machine' WHERE id = 1009;
 UPDATE books.book SET slug = 'the-time-machine' WHERE id = 2688;
 UPDATE books.book SET slug = 'the-time-patrol' WHERE id = 287;
 UPDATE books.book SET slug = 'the-time-roads' WHERE id = 1293;
@@ -2366,7 +2365,6 @@ UPDATE books.book SET slug = 'the-truce-at-bakura' WHERE id = 2307;
 UPDATE books.book SET slug = 'the-true-story-of-hansel-and-gretel' WHERE id = 2648;
 UPDATE books.book SET slug = 'the-trumpet-of-the-swan' WHERE id = 1138;
 UPDATE books.book SET slug = 'the-trumpeter-of-krakow' WHERE id = 347;
-UPDATE books.book SET slug = 'the-truth' WHERE id = 2458;
 UPDATE books.book SET slug = 'the-truth' WHERE id = 523;
 UPDATE books.book SET slug = 'the-turn-of-the-screw' WHERE id = 510;
 UPDATE books.book SET slug = 'the-twelfth-garfield-fat-cat-3-pack' WHERE id = 2294;
@@ -2374,7 +2372,6 @@ UPDATE books.book SET slug = 'the-twilight-of-courage' WHERE id = 2129;
 UPDATE books.book SET slug = 'the-twisted-claw' WHERE id = 1244;
 UPDATE books.book SET slug = 'the-two-front-war' WHERE id = 861;
 UPDATE books.book SET slug = 'the-two-princesses-of-bamarre' WHERE id = 2229;
-UPDATE books.book SET slug = 'the-two-towers' WHERE id = 2379;
 UPDATE books.book SET slug = 'the-two-towers' WHERE id = 29;
 UPDATE books.book SET slug = 'the-ultimate-guide-to-the-justice-league-of-america' WHERE id = 812;
 UPDATE books.book SET slug = 'the-ultimate-proof-of-creation-resolving-the-origins-debate' WHERE id = 2202;
@@ -2487,7 +2484,6 @@ UPDATE books.book SET slug = 'tom-seaver-s-all-time-baseball-greats' WHERE id = 
 UPDATE books.book SET slug = 'tonight-on-the-titanic' WHERE id = 1044;
 UPDATE books.book SET slug = 'top-10-basketball-legends' WHERE id = 1177;
 UPDATE books.book SET slug = 'top-hand' WHERE id = 2112;
-UPDATE books.book SET slug = 'tortured-for-christ' WHERE id = 2354;
 UPDATE books.book SET slug = 'tortured-for-christ' WHERE id = 322;
 UPDATE books.book SET slug = 'totally-cool-clean-jokes-for-kids' WHERE id = 1126;
 UPDATE books.book SET slug = 'touch-not-the-unclean-thing-the-bible-translation-controversy-and-the-principle-of-separation' WHERE id = 579;
@@ -2576,18 +2572,15 @@ UPDATE books.book SET slug = 'undisturbed-rest' WHERE id = 508;
 UPDATE books.book SET slug = 'unseen-academicals' WHERE id = 546;
 UPDATE books.book SET slug = 'unsolved-mysteries-of-american-history-an-eye-opening-journey-through-500-years-of-discoveries-disappearances-and-baffling-events' WHERE id = 481;
 UPDATE books.book SET slug = 'unsouled' WHERE id = 149;
-UPDATE books.book SET slug = 'unsouled' WHERE id = 2352;
 UPDATE books.book SET slug = 'unto-a-good-land-a-history-of-the-american-people' WHERE id = 1961;
 UPDATE books.book SET slug = 'unveiling-mysteries-of-the-bible' WHERE id = 13;
 UPDATE books.book SET slug = 'upgrade-soul' WHERE id = 1425;
 UPDATE books.book SET slug = 'uplink-from-the-underground-showtime-for-vicki' WHERE id = 884;
 UPDATE books.book SET slug = 'uprising-at-dawn' WHERE id = 1107;
 UPDATE books.book SET slug = 'urchin-of-the-riding-stars' WHERE id = 2215;
-UPDATE books.book SET slug = 'urchin-of-the-riding-stars' WHERE id = 2366;
 UPDATE books.book SET slug = 'use-of-weapons' WHERE id = 2007;
 UPDATE books.book SET slug = 'user-interface-design-for-programmers' WHERE id = 2190;
 UPDATE books.book SET slug = 'valis' WHERE id = 1793;
-UPDATE books.book SET slug = 'villains-by-necessity' WHERE id = 2470;
 UPDATE books.book SET slug = 'villains-by-necessity' WHERE id = 524;
 UPDATE books.book SET slug = 'villains-united' WHERE id = 602;
 UPDATE books.book SET slug = 'viriconium' WHERE id = 2559;
@@ -2620,7 +2613,6 @@ UPDATE books.book SET slug = 'weirdos-from-another-planet' WHERE id = 807;
 UPDATE books.book SET slug = 'westmark' WHERE id = 2631;
 UPDATE books.book SET slug = 'what-do-people-do-all-day' WHERE id = 492;
 UPDATE books.book SET slug = 'what-happened-at-midnight' WHERE id = 1049;
-UPDATE books.book SET slug = 'what-if-serious-scientific-answers-to-absurd-hypothetical-questions' WHERE id = 2378;
 UPDATE books.book SET slug = 'what-if-serious-scientific-answers-to-absurd-hypothetical-questions' WHERE id = 68;
 UPDATE books.book SET slug = 'what-jane-austen-ate-and-charles-dickens-knew-from-fox-hunting-to-whist-the-facts-of-daily-life-in-nineteenth-century-england' WHERE id = 1816;
 UPDATE books.book SET slug = 'what-makes-flamingos-pink-a-colorful-collection-of-q-a-s-for-the-unquenchably-curious' WHERE id = 1006;
@@ -2655,10 +2647,10 @@ UPDATE books.book SET slug = 'willmingtons-guide-to-the-bible' WHERE id = 368;
 UPDATE books.book SET slug = 'windows-xp-for-dummies' WHERE id = 806;
 UPDATE books.book SET slug = 'winesburg-ohio' WHERE id = 1563;
 UPDATE books.book SET slug = 'winnie-the-pooh' WHERE id = 2031;
-UPDATE books.book SET slug = 'winnie-the-pooh' WHERE id = 2640;
 UPDATE books.book SET slug = 'winter-s-heart' WHERE id = 2429;
 UPDATE books.book SET slug = 'winter-s-tale' WHERE id = 2613;
 UPDATE books.book SET slug = 'wisdom-and-innocence-a-life-of-g-k-chesterton' WHERE id = 1400;
+UPDATE books.book SET slug = 'wishbone-classics-the-strange-case-of-dr-jekyll-and-mr-hyde' WHERE id = 2320;
 UPDATE books.book SET slug = 'with-these-hands-stories' WHERE id = 2271;
 UPDATE books.book SET slug = 'without-a-hitch' WHERE id = 535;
 UPDATE books.book SET slug = 'wizard-and-glass' WHERE id = 40;
@@ -2670,7 +2662,6 @@ UPDATE books.book SET slug = 'wonder' WHERE id = 2658;
 UPDATE books.book SET slug = 'wool-omnibus' WHERE id = 2331;
 UPDATE books.book SET slug = 'wool' WHERE id = 2630;
 UPDATE books.book SET slug = 'wuthering-heights' WHERE id = 83;
-UPDATE books.book SET slug = 'wyrd-sisters' WHERE id = 2454;
 UPDATE books.book SET slug = 'wyrd-sisters' WHERE id = 513;
 UPDATE books.book SET slug = 'yertle-the-turtle-and-other-stories' WHERE id = 236;
 UPDATE books.book SET slug = 'yoda-dark-rendezvous' WHERE id = 2147;
@@ -2688,7 +2679,8 @@ UPDATE books.book SET slug = 'zoids-chaotic-century-vol-1' WHERE id = 2232;
 UPDATE books.book SET slug = 'zoids-chaotic-century-vol-2' WHERE id = 2448;
 UPDATE books.book SET slug = 'zoids-chaotic-century-vol-3' WHERE id = 2449;
 
--- todo: select * from books.book where slug is null;
+-- todo: books.nullslugs to 0 records
+-- todo: add index to book.slug
 -- todo: Melissa shelf "read" -> "Read" ? Just rename, because they are separate Goodreads shelves for separate Goodreads users?
 -- todo: update publication year
 -- todo: schedule database backup
